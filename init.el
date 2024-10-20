@@ -22,6 +22,7 @@
                      magit
                      doom-modeline
                      org-autolist
+                     org-download
 
                      ;; language specific packages
                      tuareg
@@ -46,6 +47,8 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(use-package org-download)
 
 (use-package doom-modeline
   :ensure t
@@ -222,7 +225,7 @@
  '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(package-selected-packages
-   '(org-autolist doom-modeline magit format-all merlin gruvbox-theme go-mode eldoc-box company company-mode exec-path-from-shell direnv tuareg which-key projectile key-chord evil-collection evil))
+   '(org-download org-autolist doom-modeline magit format-all merlin gruvbox-theme go-mode eldoc-box company company-mode exec-path-from-shell direnv tuareg which-key projectile key-chord evil-collection evil))
  '(tool-bar-mode nil))
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/.config/emacs/autosaves/" t)
