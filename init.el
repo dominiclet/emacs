@@ -21,6 +21,7 @@
                      company
                      magit
                      doom-modeline
+                     org-autolist
 
                      ;; language specific packages
                      tuareg
@@ -46,12 +47,13 @@
   (unless (package-installed-p package)
     (package-install package)))
 
-(add-hook 'after-init-hook 'global-company-mode)
-
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode)
   :config (setq doom-modeline-buffer-name t))
+
+(use-package org-autolist
+  :hook (org-mode . org-autolist-mode))
 
 ;; Enable Evil
 (use-package evil
@@ -96,7 +98,7 @@
       "w" 'save-buffer
       "p" 'projectile-command-map
       "c" 'evil-ex-nohighlight
-      )
+      "no" (lambda() (interactive) (find-file "~/notes/index.org")))
 
     (general-define-key :keymaps 'evil-insert-state-map
                     (general-chord "jk") 'evil-normal-state)
@@ -111,12 +113,12 @@
   )
 
 (use-package undo-tree
-  :init (setq undo-tree-auto-save-history nil)
   :ensure t
   :after evil
   :diminish
   :config
   (evil-set-undo-system 'undo-tree)
+  (setq undo-tree-auto-save-history nil)
   (global-undo-tree-mode 1))
 
 (use-package projectile
@@ -140,6 +142,7 @@
   (setq company-minimum-prefix-length 1)
   (define-key company-active-map (kbd "C-j") #'company-select-next)
   (define-key company-active-map (kbd "C-k") #'company-select-previous)
+  (setq company-global-modes '(not org-mode))
   (global-company-mode))
 
 (use-package eglot
@@ -168,8 +171,7 @@
            "bf" 'gofmt))
 
 (use-package org
-  :config
-  (org-indent-mode))
+  :hook (org-mode . org-indent-mode))
 
 (use-package magit
   :general
@@ -208,24 +210,24 @@
 ;; From: https://snarfed.org/gnu_emacs_backup_files
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
-  '(auto-save-file-name-transforms '((".*" "~/.config/emacs/autosaves/\\1" t)))
-  '(backup-directory-alist '((".*" . "~/.config/emacs/backups/"))))
-;; create the autosave dir if necessary, since emacs won't.
-(make-directory "~/.config/emacs/autosaves/" t)
-
-(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auto-save-file-name-transforms '((".*" "~/.config/emacs/autosaves/\\1" t)))
+ '(backup-directory-alist '((".*" . "~/.config/emacs/backups/")))
  '(custom-enabled-themes '(gruvbox-dark-medium))
  '(custom-safe-themes
    '("5a0ddbd75929d24f5ef34944d78789c6c3421aa943c15218bac791c199fc897d" default))
  '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(package-selected-packages
-   '(doom-modeline magit format-all merlin gruvbox-theme go-mode eldoc-box company company-mode exec-path-from-shell direnv tuareg which-key projectile key-chord evil-collection evil))
+   '(org-autolist doom-modeline magit format-all merlin gruvbox-theme go-mode eldoc-box company company-mode exec-path-from-shell direnv tuareg which-key projectile key-chord evil-collection evil))
  '(tool-bar-mode nil))
+;; create the autosave dir if necessary, since emacs won't.
+(make-directory "~/.config/emacs/autosaves/" t)
+
+
 
 
 (custom-set-faces
