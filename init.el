@@ -23,6 +23,7 @@
                      doom-modeline
                      org-autolist
                      org-download
+                     ivy
 
                      ;; language specific packages
                      tuareg
@@ -127,8 +128,13 @@
 (use-package projectile
   :config
   (setq projectile-track-known-projects-automatically nil)
+  (customize-set-value 'projectile-completion-system 'ivy)
   (projectile-mode)
   )
+
+(use-package ivy
+  :config (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+  (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line))
 
 (use-package which-key
   :config (which-key-mode)
@@ -225,7 +231,7 @@
  '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(package-selected-packages
-   '(org-download org-autolist doom-modeline magit format-all merlin gruvbox-theme go-mode eldoc-box company company-mode exec-path-from-shell direnv tuareg which-key projectile key-chord evil-collection evil))
+   '(ivy org-download org-autolist doom-modeline magit format-all merlin gruvbox-theme go-mode eldoc-box company company-mode exec-path-from-shell direnv tuareg which-key projectile key-chord evil-collection evil))
  '(tool-bar-mode nil))
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/.config/emacs/autosaves/" t)
